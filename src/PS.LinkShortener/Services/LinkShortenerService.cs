@@ -1,36 +1,43 @@
-﻿namespace PS.LinkShortener.Services
+﻿using PS.LinkShortener.Storage;
+
+namespace PS.LinkShortener.Services
 {
     public class LinkShortenerService
     {
-        private readonly Dictionary<string, string> data = new Dictionary<string, string>();
+        private readonly ILinkStorage _storage;
         const string BaseUrl = "http://sho.com/";
+
+        public LinkShortenerService(ILinkStorage storage)
+        {
+            _storage = storage;
+        }
 
         public string Shorten(string longUrl)
         {
-            string code = GenerateShortCode();
-            string shortLink = $"{BaseUrl}{code}";
+            string code;
+            string shortLink;
 
-            data.Add(shortLink, longUrl);
+            do
+            {
+                code = GenerateShortCode();
+                shortLink = $"{BaseUrl}{code}";
+            }
+            while (_storage.TryGet(shortLink, out _));
+
+            _storage.Save(shortLink, longUrl);
 
             return shortLink;
         }
 
         public string? Expand(string shortUrl)
         {
-            data.TryGetValue(shortUrl, out var shortLink);
-            return shortLink;
+            _storage.TryGet(shortUrl, out var longUrl);
+            return longUrl;
         }
 
         public string GenerateShortCode()
         {
-            string code;
-            do
-            {
-                code = Guid.NewGuid().ToString("N").Substring(0, 8);
-            }
-            while (data.ContainsKey($"{BaseUrl}{code}"));
-
-            return code;
+            return Guid.NewGuid().ToString("N").Substring(0, 8);
         }
     }
 }
