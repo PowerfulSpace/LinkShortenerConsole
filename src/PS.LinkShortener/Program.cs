@@ -3,14 +3,17 @@ using PS.LinkShortener.Storage;
 
 
 
-string filePath = "Data/links.json";
+string basePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\.."));
+string filePath = Path.Combine(basePath, "Data", "links.json");
+
 var storage = new JsonLinkStorage(filePath);
 var service = new LinkShortenerService(storage);
 
 
 while (true)
 {
-    Console.Clear();
+    //Console.Clear();
+    Console.WriteLine();
     Console.WriteLine("==== Link Shortener ====");
     Console.WriteLine("1. Сократить ссылку");
     Console.WriteLine("2. Развернуть короткую ссылку");
