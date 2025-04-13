@@ -8,9 +8,12 @@ IPathService pathService = new PathService();
 string filePath = pathService.GetDataFilePath("links.json");
 
 
-var storage = new JsonLinkStorage(filePath);
-var service = new LinkShortenerService(storage);
+//var storage = new JsonLinkStorage(filePath);
+//var service = new LinkShortenerService(storage);
 
+string redisConnection = "localhost:6379";
+var storage = new RedisLinkStorage(redisConnection);
+var service = new LinkShortenerService(storage);
 
 while (true)
 {
