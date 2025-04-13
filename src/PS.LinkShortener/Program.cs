@@ -1,14 +1,19 @@
 ﻿using PS.LinkShortener.Services;
+using PS.LinkShortener.Services.Interfaces;
 using PS.LinkShortener.Storage;
 
 
 
-string basePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\.."));
-string filePath = Path.Combine(basePath, "Data", "links.json");
+IPathService pathService = new PathService();
+string filePath = pathService.GetDataFilePath("links.json");
 
-var storage = new JsonLinkStorage(filePath);
+
+//var storage = new JsonLinkStorage(filePath);
+//var service = new LinkShortenerService(storage);
+
+string redisConnection = "localhost:6379";
+var storage = new RedisLinkStorage(redisConnection);
 var service = new LinkShortenerService(storage);
-
 
 while (true)
 {
@@ -63,6 +68,6 @@ while (true)
 }
 
 
-Console.WriteLine("\nНажмите любую клавишу для продолжения...");
-Console.ReadKey();
+//Console.WriteLine("\nНажмите любую клавишу для продолжения...");
+//Console.ReadKey();
 
