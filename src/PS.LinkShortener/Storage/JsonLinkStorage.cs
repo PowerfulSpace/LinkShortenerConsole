@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
+﻿using PS.LinkShortener.Storage.Interfaces;
+using System.Text.Json;
 
 namespace PS.LinkShortener.Storage
 {
-    public class JsonLinkStorage : ILinkStorage
+    public class JsonLinkStorage : IBulkLinkStorage
     {
         private readonly string _filePath;
         private Dictionary<string, string> _data;

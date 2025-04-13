@@ -1,4 +1,5 @@
 ﻿
+using PS.LinkShortener.Storage.Interfaces;
 using StackExchange.Redis;
 
 namespace PS.LinkShortener.Storage
@@ -26,11 +27,6 @@ namespace PS.LinkShortener.Storage
             longUrl = value.HasValue ? value.ToString() : null!;
 
             return value.HasValue;
-        }
-
-        public Dictionary<string, string> GetAll()
-        {
-            throw new NotSupportedException("Redis does not support fetching all keys efficiently in this implementation.");
         }
     }
 }

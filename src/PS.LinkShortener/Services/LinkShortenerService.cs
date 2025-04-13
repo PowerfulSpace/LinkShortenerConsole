@@ -1,4 +1,4 @@
-﻿using PS.LinkShortener.Storage;
+﻿using PS.LinkShortener.Storage.Interfaces;
 
 namespace PS.LinkShortener.Services
 {
