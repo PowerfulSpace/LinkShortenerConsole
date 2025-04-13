@@ -1,21 +1,36 @@
 ﻿
+using StackExchange.Redis;
+
 namespace PS.LinkShortener.Storage
 {
     public class RedisLinkStorage : ILinkStorage
     {
-        public Dictionary<string, string> GetAll()
+        private readonly IDatabase _db;
+        private const string KeyPrefix = "shorturl:";
+
+        public RedisLinkStorage(string connectionString)
         {
-            throw new NotImplementedException();
+            var redis = ConnectionMultiplexer.Connect(connectionString);
+            _db = redis.GetDatabase();
         }
+
 
         public void Save(string shortUrl, string longUrl)
         {
-            throw new NotImplementedException();
+            _db.StringSet(KeyPrefix + shortUrl, longUrl);
         }
 
         public bool TryGet(string shortUrl, out string longUrl)
         {
-            throw new NotImplementedException();
+            var value = _db.StringGet(KeyPrefix + shortUrl);
+            longUrl = value.HasValue ? value.ToString() : null!;
+
+            return value.HasValue;
+        }
+
+        public Dictionary<string, string> GetAll()
+        {
+            throw new NotSupportedException("Redis does not support fetching all keys efficiently in this implementation.");
         }
     }
 }
